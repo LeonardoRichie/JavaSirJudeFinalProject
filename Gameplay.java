@@ -10,6 +10,80 @@ import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.*;
 
+class position{
+    private int ballposX;
+    private int ballposY;
+    private int ballXdir;
+    private int ballYdir;
+
+    public int posX(){
+        return ballposX;
+    }
+
+    public void resetPosition(){
+        setPosition(0,0);
+    }
+    public void addX(int x){
+        this.ballposX += x;
+    }
+
+    public void addY(int y){
+        this.ballposY += y;
+    }
+
+    public int posY(){
+        return ballposY;
+    }
+    public void setPosition(int x, int y){
+        this.ballposX = x;
+        this.ballposY = y;
+    }
+
+    public int dirX(){
+        return ballXdir;
+    }
+
+    public int dirY(){
+        return ballYdir;
+    }
+
+    public void flipXdir(){
+        ballXdir = ballXdir*-1;
+    }
+
+    public void flipYdir(){
+        ballYdir = ballYdir*-1;
+    }
+
+    public void setDir(int x, int y){
+        this.ballXdir = x;
+        this.ballYdir = y;
+    }
+
+    public void resetDir(){
+        this.ballXdir = 0;
+        this.ballYdir = 0;
+    }
+}
+
+class ball1 extends position{
+    public void resetPosition(){
+        setPosition(350, 450);
+    }
+}
+
+class ball2 extends position{
+    public void resetPosition(){
+        setPosition(350, 10);
+    }
+}
+
+class ball3 extends position{
+    public void resetPosition(){
+        setPosition(450, 10);
+    }
+}
+
 
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
@@ -31,23 +105,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private String nameLength = "normal";
     private int worldSpeedX = -1; //speed for setting
     private int worldSpeedY = -2; //speed for setting
-    private int ballposX; //first position x for ball
-    private int ballposY; //first position y for ball
-    private int ballXdir; //x direction for ball
-    private int ballYdir; //y direction for ball
-
-    private int ball2posX; //first position x for ball
-    private int ball2posY; //first position y for ball
-    private int ball2Xdir; //x direction for ball
-    private int ball2Ydir; //y direction for ball
-
-    private int ball3posX; //first position x for ball
-    private int ball3posY; //first position y for ball
-    private int ball3Xdir; //x direction for ball
-    private int ball3Ydir; //y direction for ball
 
     private int worldNum = 1; //world number for indexing
     private int page = 1; //indicates which page
+
+    ball1 ball1 = new ball1();
+    ball2 ball2 = new ball2();
+    ball3 ball3 = new ball3();
 
     private int numberofBall = 1;
 
@@ -61,26 +125,24 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         setFocusTraversalKeysEnabled(false);
         timer = new Timer(delay, this);
         timer.start();
+        
 
     }
 
     public void resetGame(){
         //method to reset the stats when the game ends
         gameplayOn = true; //create paddle from moving again
-        ballposX = 350;
-        ballposY = 450;
-        ballXdir = worldSpeedX;
-        ballYdir = worldSpeedY;
+        //ballposX = 350;
+        //ballposY = 450;
 
-        ball2posX = 350; //first position x for ball
-        ball2posY = 10; //first position y for ball
-        ball2Xdir = worldSpeedX; //x direction for ball
-        ball2Ydir = worldSpeedY; //y direction for ball
+        ball1.resetPosition();
+        ball2.resetPosition();
+        ball3.resetPosition();
 
-        ball3posX = 450; //first position x for ball
-        ball3posY = 10; //first position y for ball
-        ball3Xdir = worldSpeedX; //x direction for ball
-        ball3Ydir = worldSpeedY; //y direction for ball
+        ball1.setDir(worldSpeedX, worldSpeedY);
+        ball2.setDir(worldSpeedX, worldSpeedY);
+        ball3.setDir(worldSpeedX, worldSpeedY);
+
         totalBricks = totalworldBricks;
 
         playerX = 310;
@@ -187,18 +249,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         //the ball
         g.setColor(Color.yellow);
-        g.fillOval(ballposX, ballposY, 20, 20);//oval shaped
+        g.fillOval(ball1.posX(), ball1.posY(), 20, 20);//oval shaped
 
         if (numberofBall == 2){
         g.setColor(Color.green);
-        g.fillOval(ball2posX, ball2posY, 20, 20);
+        g.fillOval(ball2.posX(), ball2.posY(), 20, 20);
         }
         if (numberofBall == 3){
         g.setColor(Color.green);
-        g.fillOval(ball2posX, ball2posY, 20, 20);
+        g.fillOval(ball2.posX(), ball2.posY(), 20, 20);
 
         g.setColor(Color.blue);
-        g.fillOval(ball3posX, ball3posY, 20, 20);
+        g.fillOval(ball3.posX(), ball3.posY(), 20, 20);
         }
         }
 
@@ -208,19 +270,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }*/
 
 
-            if (numberofBall ==1 && ballposY > 570 ||numberofBall ==2 &&  ballposY > 570 && ball2posY > 570 ||
-            numberofBall ==3 && ballposY > 570 && ball2posY > 570 && ball3posY > 570){
+            if (numberofBall ==1 && ball1.posY() > 570 ||numberofBall ==2 &&  ball1.posY() > 570 && ball2.posY() > 570 ||
+            numberofBall ==3 && ball1.posY() > 570 && ball2.posY() > 570 && ball3.posY() > 570){
                 gameplayOn = false; //stops the paddle from moving when loses or finished
                 play = false;
 
-                ballXdir = 0;
-                ballYdir = 0;
-
-                ball2Xdir = 0;
-                ball2Ydir = 0;
-
-                ball3Xdir = 0;
-                ball3Ydir = 0;
+                ball1.resetDir();
+                ball2.resetDir();
+                ball3.resetDir();
                 
                 //display text when loses the game
             g.setColor(Color.WHITE);
@@ -239,18 +296,21 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     //17:50
     @Override
         public void actionPerformed(ActionEvent e){
-            timer.start();
+            //timer.start();
 
             //when the game is still running
             if (play == true){
-                if (new Rectangle(ballposX, ballposY, 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
-                    ballYdir = -ballYdir;
+                if (new Rectangle(ball1.posX(), ball1.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
+                    ball1.flipYdir();
+                    ball1.addY(-2); //move the ball up 1 pixel to avoid crashing with paddle
                 }
-                if (new Rectangle(ball2posX, ball2posY, 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
-                    ball2Ydir = -ball2Ydir;
+                if (new Rectangle(ball2.posX(), ball2.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
+                    ball2.flipYdir();
+                    ball2.addY(-2);
                 }
-                if (new Rectangle(ball3posX, ball3posY, 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
-                    ball3Ydir = -ball3Ydir;
+                if (new Rectangle(ball3.posX(), ball3.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
+                    ball3.flipYdir();
+                    ball3.addY(-2);
                 }
                 A: for (int i = 0; i<10; i++){
                     for (int j = 0; j<10; j++){
@@ -262,9 +322,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                             int brickHeight = map.brickHeight;
 
                             Rectangle rect = new Rectangle(brickX, brickY, brickWidth, brickHeight);
-                            Rectangle ballRect = new Rectangle(ballposX, ballposY, 20, 20);
-                            Rectangle ball2Rect = new Rectangle(ball2posX, ball2posY, 20, 20);
-                            Rectangle ball3Rect = new Rectangle(ball3posX, ball3posY, 20, 20);
+                            Rectangle ballRect = new Rectangle(ball1.posX(), ball1.posY(), 20, 20);
+                            Rectangle ball2Rect = new Rectangle(ball2.posX(), ball2.posY(), 20, 20);
+                            Rectangle ball3Rect = new Rectangle(ball3.posX(), ball3.posY(), 20, 20);
                             Rectangle brickRect = rect;
 
 
@@ -276,11 +336,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                                 score += 5;
                                 
                                 //ball bouncing off the brick
-                                if(ballposX + 19<= brickRect.x || ballposX + 1 >= brickRect.x + brickRect.width){
-                                    ballXdir = -ballXdir;
+                                if(ball1.posX() + 19<= brickRect.x || ball1.posX() + 1 >= brickRect.x + brickRect.width){
+                                    ball1.flipXdir();
                                 }//from the left and right
                                 else{
-                                    ballYdir = -ballYdir;
+                                    ball1.flipYdir();
                                 }//top and bottom
                                 break A; //break the loop
                             }
@@ -291,11 +351,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                                 score += 5;
                                 
                                 //ball bouncing off the brick
-                                if(ball2posX + 19<= brickRect.x || ball2posX + 1 >= brickRect.x + brickRect.width){
-                                    ball2Xdir = -ball2Xdir;
+                                if(ball2.posX() + 19<= brickRect.x || ball2.posX() + 1 >= brickRect.x + brickRect.width){
+                                    ball2.flipXdir();
                                 }//from the left and right
                                 else{
-                                    ball2Ydir = -ball2Ydir;
+                                    ball2.flipYdir();
                                 }//top and bottom
                                 break A; //break the loop
                             }
@@ -307,11 +367,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                                 score += 5;
                                 
                                 //ball bouncing off the brick
-                                if(ball3posX + 19<= brickRect.x || ball3posX + 1 >= brickRect.x + brickRect.width){
-                                    ball3Xdir = -ball3Xdir;
+                                if(ball3.posX() + 19<= brickRect.x || ball3.posX() + 1 >= brickRect.x + brickRect.width){
+                                    ball3.flipXdir();
                                 }//from the left and right
                                 else{
-                                    ball3Ydir = -ball3Ydir;
+                                    ball3.flipYdir();
                                 }//top and bottom
                                 break A; //break the loop
                             }
@@ -327,53 +387,53 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 worldNum = 9;
                 play = false;
                 }
-
-                ballposX += ballXdir;
-                ballposY += ballYdir;
+                
+                ball1.addX(ball1.dirX());
+                ball1.addY(ball1.dirY());
 
                 if (numberofBall ==2){
-                ball2posX += ball2Xdir;
-                ball2posY += ball2Ydir;
+                    ball2.addX(ball2.dirX());
+                    ball2.addY(ball2.dirY());
                 }
 
                 if (numberofBall ==3){
-                    ball2posX += ball2Xdir;
-                    ball2posY += ball2Ydir;
-                    ball3posX += ball3Xdir;
-                    ball3posY += ball3Ydir;
+                    ball2.addX(ball2.dirX());
+                    ball2.addY(ball2.dirY());
+                    ball3.addX(ball3.dirX());
+                    ball3.addY(ball3.dirY());
                     }
                 //add the ball position for moving
 
                 //bouncing
-                if (ballposX<0){
-                    ballXdir = -ballXdir;
+                if (ball1.posX()<0){
+                    ball1.flipXdir();
                 }
-                if (ballposY<0){
-                    ballYdir = -ballYdir;
+                if (ball1.posY()<0){
+                    ball1.flipYdir();
                 }
-                if (ballposX>670){
-                    ballXdir = -ballXdir;
+                if (ball1.posX()>670){
+                    ball1.flipXdir();
                 }
 
                     //second ball
-                if (ball2posX<0){
-                    ball2Xdir = -ball2Xdir;
+                if (ball2.posX()<0){
+                    ball2.flipXdir();
                 }
-                if (ball2posY<0){
-                    ball2Ydir = -ball2Ydir;
+                if (ball2.posY()<0){
+                    ball2.flipYdir();
                 }
-                if (ball2posX>670){
-                    ball2Xdir = -ball2Xdir;
+                if (ball2.posX()>670){
+                    ball2.flipXdir();
                 }
                     //third ball
-                if (ball3posX<0){
-                    ball3Xdir = -ball3Xdir;
+                if (ball3.posX()<0){
+                    ball3.flipXdir();
                 }
-                if (ball3posY<0){
-                    ball3Ydir = -ball3Ydir;
+                if (ball3.posY()<0){
+                    ball3.flipYdir();
                 }
-                if (ball3posX>670){
-                    ball3Xdir = -ball3Xdir;
+                if (ball3.posX()>670){
+                    ball3.flipXdir();
                 }
             }
             repaint(); //redraw all components inside the game
