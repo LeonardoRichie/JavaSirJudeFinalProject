@@ -1,3 +1,4 @@
+//importing
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -11,120 +12,139 @@ import java.awt.Graphics2D;
 import java.awt.*;
 
 class position{
-    private int ballposX;
-    private int ballposY;
-    private int ballXdir;
-    private int ballYdir;
+    //class for ball position
+    private int ballposX;//position of ball in x
+    private int ballposY;//position of ball in y
+    private int ballXdir;//direction of ball in x
+    private int ballYdir;//direction of ball in y
 
     public int posX(){
         return ballposX;
-    }
-
-    public void resetPosition(){
-        setPosition(0,0);
-    }
-    public void addX(int x){
-        this.ballposX += x;
-    }
-
-    public void addY(int y){
-        this.ballposY += y;
+        //return ball position x
     }
 
     public int posY(){
         return ballposY;
+        //return ball position y
     }
+
+    public void resetPosition(){
+        setPosition(0,0);
+        //reset the position of the ball
+    }
+    public void addX(int x){
+        this.ballposX += x;
+        //add position X for the ball to move;
+    }
+
+    public void addY(int y){
+        this.ballposY += y;
+        //add position Y for the ball to move;
+    }
+
     public void setPosition(int x, int y){
         this.ballposX = x;
         this.ballposY = y;
+        //set position in both x and y
     }
 
     public int dirX(){
         return ballXdir;
+        //return the direction of the ball in x
     }
 
     public int dirY(){
         return ballYdir;
+        //return the direction of the ball in y
     }
 
     public void flipXdir(){
         ballXdir = ballXdir*-1;
+        //flip the direction ball in x (when ball is bouncing)
     }
 
     public void flipYdir(){
         ballYdir = ballYdir*-1;
+        //flip the direction ball in y (when ball is bouncing)
     }
 
     public void setDir(int x, int y){
         this.ballXdir = x;
         this.ballYdir = y;
+        //set direction of the ball;
     }
 
     public void resetDir(){
         this.ballXdir = 0;
         this.ballYdir = 0;
+        //reset direction of the ball
     }
 }
 
 class ball1 extends position{
     public void resetPosition(){
         setPosition(350, 450);
+        //reset position for ball 1
     }
 }
 
 class ball2 extends position{
     public void resetPosition(){
         setPosition(350, 10);
+        //reset position for ball 2
     }
 }
 
 class ball3 extends position{
     public void resetPosition(){
         setPosition(450, 10);
+        //reset position for ball 3
     }
 }
 
 
-
+//keylistener is to show that keyboard are pressed, released or typed
+//actionlistener the action after the user do something
+//JPanel represent visuals
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     //stating variable
     private boolean play = false; //stop gameplay
     private boolean gameplayOn = false; //stop paddle from moving
     private int score = 0; //starting score
-    private boolean frontPage = true;
+    private boolean frontPage = true; //to identify main page
 
     private int totalworldBricks;
     private int totalBricks = totalworldBricks; //total bricks in game
-    private Timer timer;
-    private int delay = 8;
+    private Timer timer; //create delay for the game.
+    private int delay = 8; //delay time 8
 
     private int playerX = 310; //player position X
     private int playerY = 550;
 
-    private int paddleSize = 100;
-    private String nameLength = "normal";
+    private int paddleSize = 100; //size of paddle in normal size
+    private String nameLength = "normal"; //used for string in setting
     private int worldSpeedX = -1; //speed for setting
     private int worldSpeedY = -2; //speed for setting
 
     private int worldNum = 1; //world number for indexing
     private int page = 1; //indicates which page
 
-    ball1 ball1 = new ball1();
-    ball2 ball2 = new ball2();
-    ball3 ball3 = new ball3();
+    ball1 ball1 = new ball1(); //create ball class
+    ball2 ball2 = new ball2(); //create ball class
+    ball3 ball3 = new ball3(); //create ball class
 
-    private int numberofBall = 1;
+    private int numberofBall = 1; //number of ball generated default
 
     private MapGenerator map; //create class for map
 
     public Gameplay(){
-        map = new MapGenerator(10, 10, 9);
-        worldNum = 9;
-        addKeyListener(this);
+        map = new MapGenerator(10, 10, 9); //empty map
+        worldNum = 9; //world num
+        addKeyListener(this); //add key listener
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-        timer = new Timer(delay, this);
-        timer.start();
+        timer = new Timer(delay, this); //create object for timer
+        timer.start();//start the timer
         
 
     }
@@ -135,22 +155,25 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         //ballposX = 350;
         //ballposY = 450;
 
-        ball1.resetPosition();
+        //reset ball position
+        ball1.resetPosition(); 
         ball2.resetPosition();
         ball3.resetPosition();
 
-        ball1.setDir(worldSpeedX, worldSpeedY);
+        //set direction ball
+        ball1.setDir(worldSpeedX, worldSpeedY); 
         ball2.setDir(worldSpeedX, worldSpeedY);
         ball3.setDir(worldSpeedX, worldSpeedY);
 
+        //set total bricks depending on each level
         totalBricks = totalworldBricks;
 
+        //reset player position and score
         playerX = 310;
         playerY = 550;
         score = 0;
     }
-
-    public void paint(Graphics g){
+    public void paint(Graphics g){//to draw object into the screen
         
         //bg
         g.setColor(Color.black);
@@ -158,15 +181,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         
         //draw map
         map.draw((Graphics2D)g);
+        //extend graphic class to get more
+        //control in changing position and rendering 2D
 
         
 
         if (page == 1){
+            //front main page
             frontPage = true;
+            //set title
             g.setColor(Color.white);
             g.setFont(new Font("serif", Font.BOLD, 60));
             g.drawString("Welcome to brick breaker" , 10, 230);
-    
+            
+            //text below title
             g.setColor(Color.white);
             g.setFont(new Font("serif", Font.BOLD, 25));
             g.drawString("Press a number in keyboard 1-9 for different levels" , 60, 265);
@@ -174,7 +202,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
             
         if (page == 2){
+            //setting page
             frontPage = false;
+            //set text
             g.setColor(Color.white);
             g.setFont(new Font("Serif", Font.BOLD, 60));
             g.drawString("Settings", 10, 50);
@@ -200,11 +230,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             g.setFont(new Font("Arial", Font.BOLD, 30));
             g.drawString("--------------------------------------", 10, 340);
             g.drawString("Customization", 10, 370);
-
+            //set text with variable
             g.setColor(Color.white);
             g.setFont(new Font("Arial", Font.BOLD, 20));
             g.drawString("Use keyboard keys to customize", 10, 400);
-            g.drawString("Ball Speed: " +-worldSpeedX + "x", 10, 420);
+            g.drawString("Ball Speed: " + -worldSpeedX /*worldspeed minus*/+ "x", 10, 420);
             g.drawString("Width of Paddle: " + nameLength, 10, 440);
             g.drawString("Number of Ball: " + numberofBall, 10, 460);
             g.drawString("BallSpeed (G KEY = 1X, F KEY = 2X)", 10, 500);
@@ -264,17 +294,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }
         }
 
-        /*if(ballposY > 570){
-            //when ball fall from the screen
-            ballStock -=1;
-        }*/
-
-
             if (numberofBall ==1 && ball1.posY() > 570 ||numberofBall ==2 &&  ball1.posY() > 570 && ball2.posY() > 570 ||
             numberofBall ==3 && ball1.posY() > 570 && ball2.posY() > 570 && ball3.posY() > 570){
                 gameplayOn = false; //stops the paddle from moving when loses or finished
                 play = false;
-
+                //reset the direction of the ball (freeze the ball)
                 ball1.resetDir();
                 ball2.resetDir();
                 ball3.resetDir();
@@ -295,8 +319,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     //17:50
     @Override
-        public void actionPerformed(ActionEvent e){
-            //timer.start();
+        public void actionPerformed(ActionEvent e){ //codes that react to action
 
             //when the game is still running
             if (play == true){
@@ -321,12 +344,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                             int brickWidth = map.brickWidth;
                             int brickHeight = map.brickHeight;
 
+                            //create rectangle for each object
                             Rectangle rect = new Rectangle(brickX, brickY, brickWidth, brickHeight);
                             Rectangle ballRect = new Rectangle(ball1.posX(), ball1.posY(), 20, 20);
                             Rectangle ball2Rect = new Rectangle(ball2.posX(), ball2.posY(), 20, 20);
                             Rectangle ball3Rect = new Rectangle(ball3.posX(), ball3.posY(), 20, 20);
                             Rectangle brickRect = rect;
-
 
                             //when ball collide bricks
                             if (ballRect.intersects(brickRect)){
@@ -388,21 +411,23 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 play = false;
                 }
                 
+                //add position to the ball so it will move
                 ball1.addX(ball1.dirX());
                 ball1.addY(ball1.dirY());
 
+                //if there are 2 balls inside the game
                 if (numberofBall ==2){
                     ball2.addX(ball2.dirX());
                     ball2.addY(ball2.dirY());
                 }
 
+                //if there are 3 balls inside the game
                 if (numberofBall ==3){
                     ball2.addX(ball2.dirX());
                     ball2.addY(ball2.dirY());
                     ball3.addX(ball3.dirX());
                     ball3.addY(ball3.dirY());
                     }
-                //add the ball position for moving
 
                 //bouncing
                 if (ball1.posX()<0){
@@ -439,7 +464,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             repaint(); //redraw all components inside the game
         }
 
-        @Override
+        //override the function for interface keylistener
+        @Override 
         public void keyTyped(KeyEvent e){}
         
         @Override
@@ -447,8 +473,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         @Override
         public void keyPressed(KeyEvent e){
+            //right arrow key
             if(e.getKeyCode()== KeyEvent.VK_RIGHT){
                 if (page == 1){
+                    //move from main page to setting page
                     frontPage =false;
                     page = 2;
                 }
@@ -457,11 +485,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     playerX = 600;
                 }
                 else{
-                    moveRight();
+                    moveRight(); //move paddle to right
                 }
             }
+
+            //left arrow key
             if(e.getKeyCode()== KeyEvent.VK_LEFT){
                 if (page == 2){
+                    //move from the setting to the main page
                     frontPage = true;
                     page = 1;
                 }
@@ -470,7 +501,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     playerX = 10;
                 }
                 else{
-                    moveLeft();
+                    moveLeft(); //move paddle to left
                 }     
             }
 
@@ -480,7 +511,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     playerY = 475;
                 }
                 else{
-                    moveUp();
+                    moveUp(); //move the paddle up
                 } 
             }
 
@@ -490,7 +521,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     playerY = 550;
                 }
                 else{
-                    moveDown();
+                    moveDown(); //move the paddle down
                 }  
             }
 
@@ -498,15 +529,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 //reset the game
                 if(play == false){
                     resetGame();
-                    map = new MapGenerator(10, 10, worldNum);
+                    map = new MapGenerator(10, 10, worldNum); //depending on the level
                     repaint();
                 }
                 
             }
 
             if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
+                //go back to the main front page
                 resetGame();
-                page = 1;
+                page = 1; 
                 gameplayOn = false;
                 map = new MapGenerator(10, 10, 9);
                 worldNum = 9;
@@ -516,6 +548,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
 
             if(e.getKeyCode()==KeyEvent.VK_G){
+                //set speed
                 if (page == 2){
                     worldSpeedX = -1;
                     worldSpeedY = -2;
@@ -523,6 +556,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
 
             if(e.getKeyCode()==KeyEvent.VK_F){
+                //set speed
                 if (page == 2){
                     worldSpeedX = -2;
                     worldSpeedY = -4;
@@ -530,6 +564,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
 
             if(e.getKeyCode()==KeyEvent.VK_N){
+                //set paddle size
                 if (page == 2){
                     paddleSize = 100;
                     nameLength = "Normal";
@@ -537,6 +572,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
 
             if(e.getKeyCode()==KeyEvent.VK_S){
+                //set paddle size
                 if (page == 2){
                     paddleSize = 50;
                     nameLength = "Short";
@@ -544,6 +580,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
 
             if(e.getKeyCode()==KeyEvent.VK_E){
+                //set paddle size
                 if (page == 2){
                     paddleSize = 25;
                     nameLength = "Extreme";
@@ -552,6 +589,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             
             if(e.getKeyCode()==KeyEvent.VK_1){
                 if (page == 2){
+                    //set the number of ball inside the game
                     numberofBall = 1;
                 }
                 //when press number 1 of the keyboard, it display level 1
@@ -569,6 +607,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
             if(e.getKeyCode()==KeyEvent.VK_2){
                 if (page == 2){
+                    //set the number of ball inside the game
                     numberofBall =2;
                 }
                 //when press number 2 of the keyboard, it display level 2
@@ -586,6 +625,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
             if(e.getKeyCode()==KeyEvent.VK_3){
                 if (page == 2){
+                    //set the number of ball inside the game
                     numberofBall =3;
                 }
                 //when press number 3 of the keyboard, it display level 3
@@ -682,27 +722,29 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }
         public void moveRight(){
             //paddle movements to the right
-            if (worldNum!=9 && gameplayOn ==true){
+            if (worldNum!=9 && gameplayOn ==true){ //if the player is inside a level
             play = true;
-            playerX += 20;
+            playerX += 20; //add player position
             }
         }
 
         public void moveLeft(){
             //paddle movements to the left
-            if (worldNum!=9 && gameplayOn ==true){
+            if (worldNum!=9 && gameplayOn ==true){ //if the player is inside a level
             play = true;
             playerX -= 20;}
         }
 
         public void moveUp(){
-            if (worldNum!=9 && gameplayOn ==true){
+            //paddle movements to the top
+            if (worldNum!=9 && gameplayOn ==true){ //if the player is inside a level
                 play = true;
                 playerY -= 20;}
         }
 
         public void moveDown(){
-            if (worldNum!=9 && gameplayOn ==true){
+            //paddle movements down
+            if (worldNum!=9 && gameplayOn ==true){ //if the player is inside a level
                 play = true;
                 playerY += 20;}
         }
