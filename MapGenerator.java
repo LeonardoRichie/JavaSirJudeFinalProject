@@ -4,9 +4,9 @@ import java.awt.BasicStroke;
 
 class MapStats{
     public int x; //world num
-    public int brickWidth;
-    public int brickHeight;
-    public int numBricks =0;
+    public int brickWidth; //width of bricks
+    public int brickHeight; //height of bricks
+    public int numBricks =0; //number of bricks
     //map list to store map per levels
     int[][][] map ={
         //1
