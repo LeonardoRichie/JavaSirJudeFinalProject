@@ -6,6 +6,7 @@ import java.awt.*;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
+import javax.sound.sampled.*;
 
 public class BrickBreak {
 
@@ -13,18 +14,18 @@ public class BrickBreak {
         File GameSound = new File("Game.wav"); //put wav into the program variable
         
         //creating the game board
-        JFrame obj = new JFrame();
+        JFrame BrickBreak = new JFrame();
         //create object from class
         Gameplay gamePlay = new Gameplay();
 
         //set size
-        obj.setBounds(10, 10, 700, 600);
+        BrickBreak.setBounds(10, 10, 700, 600);
 
-        obj.setTitle("Breakout Ball"); //title
-        obj.setResizable(false); //resize false
-        obj.setVisible(true); //set the program to be seen
-        obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //close button
-        obj.add(gamePlay); //add class gameplay
+        BrickBreak.setTitle("Brick Break"); //title
+        BrickBreak.setResizable(false); //resize false
+        BrickBreak.setVisible(true); //set the program to be seen
+        BrickBreak.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //close button
+        BrickBreak.add(gamePlay); //add class gameplay
 
         PlaySound(GameSound); //run the play sound function
 
@@ -38,6 +39,9 @@ public class BrickBreak {
         try{
             Clip clip = AudioSystem.getClip(); //create clip refference
             clip.open(AudioSystem.getAudioInputStream(Sound)); //open the audiostream object
+            FloatControl gainControl = 
+            (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN); //get control of the clip
+            gainControl.setValue(-20.0f); //minus decible
             clip.start(); //start the audiofile
             clip.loop(Clip.LOOP_CONTINUOUSLY); //loop the sound until game ends
 

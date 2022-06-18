@@ -231,15 +231,15 @@ public class Gameplay extends JPanel implements KeyListener , ActionListener {
 
             //when the game is still running
             if (play == true){
-                if (new Rectangle(ball1.posX(), ball1.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
+                if (new Rectangle(ball1.posX(), ball1.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, paddleSize, 8))){
                     ball1.flipYdir();
                     ball1.addY(-2); //move the ball up 1 pixel to avoid crashing with paddle
                 }
-                if (new Rectangle(ball2.posX(), ball2.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
+                if (new Rectangle(ball2.posX(), ball2.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, paddleSize, 8))){
                     ball2.flipYdir();
                     ball2.addY(-2);
                 }
-                if (new Rectangle(ball3.posX(), ball3.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, 100, 8))){
+                if (new Rectangle(ball3.posX(), ball3.posY(), 20, 20).intersects(new Rectangle(playerX, playerY, paddleSize, 8))){
                     ball3.flipYdir();
                     ball3.addY(-2);
                 }
@@ -577,7 +577,7 @@ public class Gameplay extends JPanel implements KeyListener , ActionListener {
 
             if(e.getKeyCode()==KeyEvent.VK_6){
                 //when press number 6 of the keyboard, it display level 6
-                if(play == false && page == 1){
+                if(play == false && frontPage == true){
                     totalworldBricks = 28;
                     page = 0;
                     resetGame();
